@@ -4,7 +4,7 @@ namespace PlaylistsNET.Content
 {
     public class PlaylistParserFactory
     {
-        public IPlaylistParser<IBasePlaylist> GetPlaylistParser(string fileType)
+        public static IPlaylistParser<IBasePlaylist> GetPlaylistParser(string fileType)
         {
             IPlaylistParser<IBasePlaylist> playlistParser;
             fileType = fileType.ToLower();

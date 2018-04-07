@@ -4,7 +4,7 @@ namespace PlaylistsNET.Content
 {
     public class PlaylistToTextHelper
     {
-        public string ToString(IBasePlaylist playlist)
+        public static string ToText(IBasePlaylist playlist)
         {
             string text = "";
 
