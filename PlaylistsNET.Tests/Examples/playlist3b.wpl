@@ -1,0 +1,11 @@
+<?wpl version="1.0"?>
+<smil>
+  <head>
+    <title>Eurowizja</title>
+  </head>
+  <body>
+    <seq>
+      <media src="D:\Muzyka\Eurowizja\Eurowizja 2014\Elaiza - Is It Right.mp3" albumTitle="E&lt;u&gt;r'o&amp;vision &quot;Song Contest 2014" albumArtist="E&lt;&gt;laiza" trackTitle="Is It Right" trackArtist="Elaiza" />
+    </seq>
+  </body>
+</smil>
