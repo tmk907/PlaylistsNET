@@ -2,6 +2,13 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard1.4</TargetFramework>
+    <Authors>Tomasz Walecki</Authors>
+    <Company />
+    <PackageProjectUrl>https://github.com/tmk907/PlaylistsNET</PackageProjectUrl>
+    <PackageLicenseUrl>https://github.com/tmk907/PlaylistsNET/blob/master/LICENSE</PackageLicenseUrl>
+    <RepositoryUrl>https://github.com/tmk907/PlaylistsNET</RepositoryUrl>
+    <PackageTags>playlists m3u pls wpl zpl m3u8 playlist</PackageTags>
+    <Description>Simple library for reading and writing playlist's files. Supported formats: m3u, pls, wpl, zpl.</Description>
   </PropertyGroup>
 
 </Project>
