@@ -10,7 +10,7 @@ namespace PlaylistsNET.Utils
             if (String.IsNullOrWhiteSpace(filePath)) return filePath;
 
             if (filePath.Contains(@"://")) return filePath; //stream
-            if (filePath.Length > 3 && filePath[1] == ':' && filePath[2] == '/') return filePath; //absolute local path
+            if (filePath.Length > 3 && filePath[1] == ':' && (filePath[2] == '\\' || filePath[2] == '/')) return filePath; //absolute local path
 
             if (filePath[0] == '/' || filePath[0] == '\\') //relative path
             {
