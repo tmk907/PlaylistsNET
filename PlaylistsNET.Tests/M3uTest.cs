@@ -4,7 +4,7 @@ using PlaylistsNET.Models;
 using PlaylistsNET.Tests;
 using System;
 
-namespace Playlists.UWP.Tests
+namespace PlaylistsNET.Tests
 {
     [TestClass]
     public class M3uTest
