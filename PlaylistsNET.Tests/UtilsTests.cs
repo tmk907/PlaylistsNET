@@ -67,9 +67,13 @@ namespace PlaylistsNET.Tests
             filePath = @"..\..\Contradanza.mp3";
             path = Utils.Utils.MakeAbsolutePath(folderPath, filePath);
             Assert.AreEqual(path, expectedPath);
+
+            folderPath = @"D:\Muzyka\Vanessa Mee\";
+            filePath = @"..\..\Muzyka\Contradanza.mp3";
+            path = Utils.Utils.MakeAbsolutePath(folderPath, filePath);
+            Assert.AreEqual(path, expectedPath);
         }
 
-        //Test fails
         [TestMethod]
         public void MakeAbsolutePathForStream_Equal()
         {
