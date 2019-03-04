@@ -75,11 +75,11 @@ namespace PlaylistsNET.Content
                             title = GetTitle(line);
                             seconds = GetSeconds(line);
                         }
-                        else if (line.StartsWith("EXTALB"))
+                        else if (line.StartsWith("#EXTALB"))
                         {
                             album = GetAlbum(line);
                         }
-                        else if (line.StartsWith("EXTART"))
+                        else if (line.StartsWith("#EXTART"))
                         {
                             artist = GetArtist(line);
                         }
