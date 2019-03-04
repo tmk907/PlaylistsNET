@@ -9,7 +9,7 @@
     <RepositoryUrl>https://github.com/tmk907/PlaylistsNET</RepositoryUrl>
     <PackageTags>playlists m3u pls wpl zpl m3u8 playlist</PackageTags>
     <Description>Simple library for reading and writing playlist's files. Supported formats: m3u, pls, wpl, zpl.</Description>
-    <Version>1.0.1</Version>
+    <Version>1.0.2</Version>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
