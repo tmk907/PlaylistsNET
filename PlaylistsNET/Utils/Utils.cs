@@ -9,18 +9,30 @@ namespace PlaylistsNET.Utils
         {
             if (String.IsNullOrWhiteSpace(filePath)) return filePath;
 
-            if (filePath.Contains(@"://")) return filePath; //stream
-            if (filePath.Length > 3 && filePath[1] == ':' && (filePath[2] == '\\' || filePath[2] == '/')) return filePath; //absolute local path
+            if (IsStream(filePath)) return filePath;
+            if (IsAbsolutePath(filePath)) return filePath;
 
-            if (filePath[0] == '/' || filePath[0] == '\\') //relative path
+            if (filePath[0] == '/' || filePath[0] == '\\') //relative path and starts with / or \
             {
                 filePath = filePath.Substring(1);
             }
             try
             {
-                string path = Path.Combine(folderPath, filePath);
-                path = Path.GetFullPath(path);
-                return path;
+                if (IsStream(folderPath))
+                {
+                    if (!folderPath.EndsWith("/"))
+                    {
+                        folderPath = folderPath + "/";
+                    }
+                    string path = Path.Combine(folderPath, filePath);
+                    return path;
+                }
+                else
+                {
+                    string path = Path.Combine(folderPath, filePath);
+                    path = Path.GetFullPath(path);
+                    return path;
+                }
             }
             catch (ArgumentException ex)
             {
@@ -35,13 +47,6 @@ namespace PlaylistsNET.Utils
                 return filePath;
             }
         }
-
-        //public static string MakeAbsolutePath(string folderPath, string filePath)
-        //{
-        //    string path = Path.Combine(folderPath, filePath);
-        //    path = Path.GetFullPath(path);
-        //    return path;
-        //}
 
         public static String MakeRelativePath(string folderPath, string fileAbsolutePath)
         {
@@ -67,6 +72,31 @@ namespace PlaylistsNET.Utils
             }
 
             return relativePath;
+        }
+
+        public static bool IsAbsolutePath(string path)
+        {
+            if (path.Length > 3)
+            {
+                if (path[1] == ':' && (path[2] == '\\' || path[2] == '/')) return true;
+            }
+            return false;
+        }
+
+        public static bool IsRelativePath(string path)
+        {
+            if (path.StartsWith(@"/") ||
+                path.StartsWith(@"./") ||
+                path.StartsWith(@"../") ||
+                path.StartsWith(@"\") ||
+                path.StartsWith(@".\") ||
+                path.StartsWith(@"..\")) return true;
+            return false;
+        }
+
+        public static bool IsStream(string path)
+        {
+            return path.Contains(@"://");
         }
 
         public  static string UnEscape(string content)
