@@ -116,7 +116,7 @@ namespace PlaylistsNET.Content
                 //0123456789
                 //#EXTINF:1234,
                 string s = line.Substring(8, line.IndexOf(',') - 8);
-                seconds = Int32.Parse(s);
+                seconds = (int)double.Parse(s);
             }
             catch { }
             return seconds;
