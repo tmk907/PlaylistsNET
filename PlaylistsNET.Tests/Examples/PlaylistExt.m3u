@@ -1,6 +1,7 @@
 ﻿#EXTM3U
 #EXTINF:254,Andrea Bocelli - Chiara
 D:\Muzyka\Andrea Bocelli\04 Chiara.mp3
+#EXTVLCOPT:network-caching=1000
 #EXTINF:-1,Andrea Bocelli - Con Te Partiro
 D:\Muzyka\Andrea Bocelli\01 Con Te Partiro.mp3
 #EXTALB:AndreaBocelli

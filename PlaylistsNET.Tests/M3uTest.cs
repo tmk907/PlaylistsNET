@@ -1,8 +1,9 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PlaylistsNET.Content;
 using PlaylistsNET.Models;
-using PlaylistsNET.Tests;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace PlaylistsNET.Tests
 {
@@ -65,6 +66,10 @@ namespace PlaylistsNET.Tests
                 Duration = TimeSpan.FromSeconds(-1),
                 Path = @"D:\Muzyka\Andrea Bocelli\01 Con Te Partiro.mp3",
                 Title = "Andrea Bocelli - Con Te Partiro",
+                CustomProperties = new Dictionary<string, string>
+                {
+                    ["EXTVLCOPT"] = "network-caching=1000"
+                },
             });
             playlist.PlaylistEntries.Add(new M3uPlaylistEntry()
             {
@@ -144,6 +149,10 @@ namespace PlaylistsNET.Tests
                 Duration = TimeSpan.FromSeconds(-1),
                 Path = @"D:\Muzyka\Andrea Bocelli\01 Con Te Partiro.mp3",
                 Title = "Andrea Bocelli - Con Te Partiro",
+                CustomProperties = new Dictionary<string, string>
+                {
+                    ["EXTVLCOPT"] = "network-caching=1000"
+                },
             });
             playlist.PlaylistEntries.Add(new M3uPlaylistEntry()
             {
@@ -166,6 +175,9 @@ namespace PlaylistsNET.Tests
             Assert.AreEqual(playlist.PlaylistEntries[1].Title, file.PlaylistEntries[1].Title);
             Assert.AreNotEqual(playlist.PlaylistEntries[1].Album, file.PlaylistEntries[1].Album);
             Assert.AreNotEqual(playlist.PlaylistEntries[1].AlbumArtist, file.PlaylistEntries[1].AlbumArtist);
+            Assert.AreEqual(playlist.PlaylistEntries[1].CustomProperties.Count(), file.PlaylistEntries[1].CustomProperties.Count());
+            Assert.AreEqual(playlist.PlaylistEntries[1].CustomProperties.First().Key, file.PlaylistEntries[1].CustomProperties.First().Key);
+            Assert.AreEqual(playlist.PlaylistEntries[1].CustomProperties.First().Value, file.PlaylistEntries[1].CustomProperties.First().Value);
             Assert.AreEqual(playlist.PlaylistEntries[2].Path, file.PlaylistEntries[2].Path);
             Assert.AreEqual(playlist.PlaylistEntries[2].Title, file.PlaylistEntries[2].Title);
             Assert.AreEqual(playlist.PlaylistEntries[2].Album, file.PlaylistEntries[2].Album);
