@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using PlaylistsNET.Models;
 
@@ -31,6 +33,13 @@ namespace PlaylistsNET.Content
                     if (!String.IsNullOrEmpty(entry.AlbumArtist))
                     {
                         sb.Append("#EXTART:").Append(entry.AlbumArtist).AppendLine();
+                    }
+                    if (entry.CustomProperties != null)
+                    {
+                        foreach (var customProperty in entry.CustomProperties)
+                        {
+                            sb.Append('#').Append(customProperty.Key).Append(':').Append(customProperty.Value).AppendLine();
+                        }
                     }
                     sb.Append("#EXTINF:").Append((int)entry.Duration.TotalSeconds).Append(',').Append(entry.Title).AppendLine();
                 }
@@ -67,6 +76,7 @@ namespace PlaylistsNET.Content
             string artist = "";
             string album = "";
             int seconds = 0;
+            List<KeyValuePair<string, string>> customProperties = null;
             while (!streamReader.EndOfStream)
             {
                 string line = streamReader.ReadLine();
@@ -88,6 +98,20 @@ namespace PlaylistsNET.Content
                         {
                             artist = GetArtist(line);
                         }
+                        else
+                        {
+                            var delimeterPosition = line.IndexOf(':');
+                            if (delimeterPosition >= 0)
+                            {
+                                var key = line.Substring(1, delimeterPosition - 1);
+                                var value = line.Substring(delimeterPosition + 1);
+                                if (customProperties == null)
+                                {
+                                    customProperties = new List<KeyValuePair<string, string>>();
+                                }
+                                customProperties.Add(new KeyValuePair<string, string>(key, value));
+                            }
+                        }
                     }
                 }
                 else
@@ -105,9 +129,11 @@ namespace PlaylistsNET.Content
                         AlbumArtist = artist,
                         Duration = TimeSpan.FromSeconds(seconds),
                         Path = line,
-                        Title = title
+                        Title = title,
+                        CustomProperties = customProperties ?? Enumerable.Empty<KeyValuePair<string, string>>()
                     });
                     prevLineIsExtInf = false;
+                    customProperties = null;
                 }
             }
             return playlist;
