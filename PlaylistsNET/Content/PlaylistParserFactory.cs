@@ -11,10 +11,8 @@ namespace PlaylistsNET.Content
             switch (fileType)
             {
                 case ".m3u":
-                    playlistParser = new M3uContent();
-                    break;
                 case ".m3u8":
-                    playlistParser = new M3u8Content();
+                    playlistParser = new M3uContent();
                     break;
                 case ".pls":
                     playlistParser = new PlsContent();
