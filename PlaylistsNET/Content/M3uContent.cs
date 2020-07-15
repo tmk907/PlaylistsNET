@@ -1,22 +1,16 @@
-﻿using PlaylistsNET.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using PlaylistsNET.Models;
 
 namespace PlaylistsNET.Content
 {
 	public class M3uContent : IPlaylistParser<M3uPlaylist>, IPlaylistWriter<M3uPlaylist>
 	{
-		[Obsolete("ToText is depreciated. Use ToString instead.")]
 		public string ToText(M3uPlaylist playlist)
-		{
-			return playlist.ToString();
-		}
-
-		public string ToString(M3uPlaylist playlist)
 		{
 			StringBuilder sb = new StringBuilder();
 
@@ -39,12 +33,12 @@ namespace PlaylistsNET.Content
 						sb.AppendLine($"#{currentComment}");
 					}
 
-					foreach (var customProperty in entry.CustomProperties)
+					foreach (var customProperty in entry.Properties.Where(x => !string.IsNullOrEmpty(x.Value)))
 					{
 						sb.AppendLine($"#{customProperty.Key}:{customProperty.Value}");
 					}
 
-					sb.AppendLine($"#EXTINF:{entry.Duration},{entry.Title}");
+					sb.AppendLine($"#EXTINF:{(int)entry.Duration.TotalSeconds},{entry.Title}");
 				}
 				sb.AppendLine(entry.Path);
 			}
@@ -96,7 +90,8 @@ namespace PlaylistsNET.Content
 
 				playlist.PlaylistEntries.Add(new M3uPlaylistEntry()
 				{
-					Path = currentLine
+					Path = currentLine,
+					Title = "",
 				});
 			}
 
@@ -116,7 +111,8 @@ namespace PlaylistsNET.Content
 				var match = Regex.Match(currentLine, @"^#EXTINF:(-?\d*),(.*)$");
 				if (match.Success)
 				{
-					currentEntry.Duration = string.IsNullOrEmpty(match.Groups[1].Value) ? 0 : int.Parse(match.Groups[1].Value);
+					var seconds = string.IsNullOrEmpty(match.Groups[1].Value) ? 0 : double.Parse(match.Groups[1].Value);
+					currentEntry.Duration = TimeSpan.FromSeconds(seconds);
 					currentEntry.Title = match.Groups[2].Value;
 					continue;
 				}
@@ -124,7 +120,7 @@ namespace PlaylistsNET.Content
 				match = Regex.Match(currentLine, @"^#(EXT.*):(.*)$");
 				if (match.Success)
 				{
-					currentEntry.CustomProperties.Add(match.Groups[1].Value, match.Groups[2].Value);
+					currentEntry.Properties.Add(match.Groups[1].Value, match.Groups[2].Value);
 					continue;
 				}
 
