@@ -72,7 +72,7 @@ namespace PlaylistsNET.Content
 				return GetExtM3u(playlistLines);
 			}
 
-			throw new InvalidDataException("Playlist appears to be a HLS playlist. Use the HLS parser instead.");
+			throw new FormatException("Playlist appears to be a HLS playlist. Use the HLS parser instead.");
 		}
 
 		private M3uPlaylist GetM3u(List<string> playlistLines)

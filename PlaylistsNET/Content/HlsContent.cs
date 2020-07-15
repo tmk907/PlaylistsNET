@@ -23,7 +23,7 @@ namespace PlaylistsNET.Content
 			// Not an EXT playlist, so can't be an HLS playlist
 			if (playlistLines[0] != "#EXTM3U")
 			{
-				throw new InvalidDataException("Playlist missing required EXTM3U tag.");
+				throw new FormatException("Playlist missing required EXTM3U tag.");
 			}
 
 			// Remove "#EXTM3U" as it is no longer needed
@@ -33,7 +33,7 @@ namespace PlaylistsNET.Content
 			var isHls = playlistLines.Where(x => Regex.IsMatch(x, @"^#EXT-X-VERSION:\d$")).Any();
 			if (!isHls)
 			{
-				throw new InvalidDataException("Playlist missing required EXT-X-VERSION tag.");
+				throw new FormatException("Playlist missing required EXT-X-VERSION tag.");
 			}
 
 			// HLS Master, not Media
@@ -44,7 +44,7 @@ namespace PlaylistsNET.Content
 			isMaster = isMaster || playlistLines.Where(x => Regex.IsMatch(x, @"^#EXT-X-SESSION-KEY:(.*)$")).Any();
 			if (isMaster)
 			{
-				throw new InvalidDataException("Playlist appears to be a HLS Master playlist.");
+				throw new FormatException("Playlist appears to be a HLS Master playlist.");
 			}
 
 			return GetMediaHls(playlistLines);
@@ -205,7 +205,7 @@ namespace PlaylistsNET.Content
 			// Not an EXT playlist, so can't be an HLS playlist
 			if (playlistLines[0] != "#EXTM3U")
 			{
-				throw new InvalidDataException("Playlist missing required EXTM3U tag.");
+				throw new FormatException("Playlist missing required EXTM3U tag.");
 			}
 
 			// Remove "#EXTM3U" as it is no longer needed
@@ -215,7 +215,7 @@ namespace PlaylistsNET.Content
 			var isHls = playlistLines.Where(x => Regex.IsMatch(x, @"^#EXT-X-VERSION:\d$")).Any();
 			if (!isHls)
 			{
-				throw new InvalidDataException("Playlist missing required EXT-X-VERSION tag.");
+				throw new FormatException("Playlist missing required EXT-X-VERSION tag.");
 			}
 
 			// HLS Media playlist, not Master
@@ -228,7 +228,7 @@ namespace PlaylistsNET.Content
 			isMedia = isMedia || playlistLines.Where(x => Regex.IsMatch(x, @"^#EXT-X-I-FRAMES-ONLY$")).Any();
 			if (isMedia)
 			{
-				throw new InvalidDataException("Playlist appears to be a HLS Media playlist.");
+				throw new FormatException("Playlist appears to be a HLS Media playlist.");
 			}
 
 			return GetMasterHls(playlistLines);
@@ -330,7 +330,7 @@ namespace PlaylistsNET.Content
 								currentEntry.ClosedCaptions = value;
 								break;
 							default:
-								throw new InvalidDataException($"STREAM-INF tag contains unknown attribute: {currentMatch.Groups[1].Value}");
+								throw new FormatException($"STREAM-INF tag contains unknown attribute: {currentMatch.Groups[1].Value}");
 						}
 					}
 
