@@ -51,6 +51,7 @@
     <Compile Include="Helpers.cs" />
     <Compile Include="HlsTests.cs" />
     <Compile Include="M3uTest.cs" />
+    <Compile Include="PlaylistParserFactoryTest.cs" />
     <Compile Include="PlsTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UtilsTests.cs" />

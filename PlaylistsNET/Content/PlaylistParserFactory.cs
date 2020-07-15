@@ -16,12 +16,18 @@ namespace PlaylistsNET.Content
 
     public class PlaylistParserFactory
     {
-		[Obsolete("This method is depreciated, use GetPlaylistParser(PlaylistType) instead.")]
 		public static IPlaylistParser<IBasePlaylist> GetPlaylistParser(string fileType)
 		{
-			fileType = fileType.Trim('.');
-			var type = (PlaylistType)Enum.Parse(typeof(PlaylistType), fileType, true);
-			return GetPlaylistParser(type);
+			fileType = fileType.Trim('.').ToLower();
+            try
+            {
+                var type = (PlaylistType)Enum.Parse(typeof(PlaylistType), fileType, true);
+                return GetPlaylistParser(type);
+            }
+            catch (ArgumentException ex)
+            {
+                throw new ArgumentException($"Unsupported playlist extension: {fileType}");
+            }
 		}
 
 		public static IPlaylistParser<IBasePlaylist> GetPlaylistParser(PlaylistType playlistType)
