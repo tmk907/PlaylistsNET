@@ -236,19 +236,6 @@ namespace PlaylistsNET.Content
 
 		private HlsMasterPlaylist GetMasterHls(List<string> playlistLines)
 		{
-			// Verify there are no Media tags in the Master playlist
-			bool media = playlistLines.Where(x => Regex.IsMatch(x, @"^#EXT-X-TARGETDURATION:(\d*)$")).Any();
-			media = media || playlistLines.Where(x => Regex.IsMatch(x, @"^#EXT-X-MEDIA-SEQUENCE:(\d*)$")).Any();
-			media = media || playlistLines.Where(x => Regex.IsMatch(x, @"^#EXT-X-DISCONTINUITY-SEQUENCE:(\d*)$")).Any();
-			media = media || playlistLines.Where(x => Regex.IsMatch(x, @"^EXT-X-PLAYLIST-TYPE:(.*)$")).Any();
-			media = media || playlistLines.Where(x => Regex.IsMatch(x, @"^#EXT-X-ENDLIST$")).Any();
-			media = media || playlistLines.Where(x => Regex.IsMatch(x, @"^#EXT-X-I-FRAMES-ONLY$")).Any();
-
-			if (media)
-			{
-				throw new InvalidDataException("HLS Master playlist contains Media tags");
-			}
-
 			var playlist = new HlsMasterPlaylist();
 			var currentEntry = new HlsMasterPlaylistEntry();
 			foreach (var currentLine in playlistLines)
