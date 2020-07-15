@@ -49,6 +49,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Helpers.cs" />
+    <Compile Include="HlsTests.cs" />
     <Compile Include="M3uTest.cs" />
     <Compile Include="PlsTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -102,7 +103,13 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Examples\PlaylistExtHlsMaster.m3u">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Examples\PlaylistExt.m3u">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Examples\PlaylistExtHls.m3u">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Examples\PlaylistNotExt.m3u">

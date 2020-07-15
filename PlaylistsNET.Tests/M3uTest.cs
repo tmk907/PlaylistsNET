@@ -1,13 +1,12 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PlaylistsNET.Content;
 using PlaylistsNET.Models;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace PlaylistsNET.Tests
 {
-    [TestClass]
+	[TestClass]
     public class M3uTest
     {
         [TestMethod]
@@ -18,29 +17,23 @@ namespace PlaylistsNET.Tests
             playlist.IsExtended = false;
             playlist.PlaylistEntries.Add(new M3uPlaylistEntry()
             {
-                Album = "",
-                AlbumArtist = "",
-                Duration = TimeSpan.Zero,
+                Duration = 0,
                 Path = @"D:\Muzyka\Andrea Bocelli\04 Chiara.mp3",
                 Title = "",
             });
             playlist.PlaylistEntries.Add(new M3uPlaylistEntry()
             {
-                Album = null,
-                AlbumArtist = null,
-                Duration = TimeSpan.Zero,
+                Duration = 0,
                 Path = @"D:\Muzyka\Andrea Bocelli\01 Con Te Partiro.mp3",
                 Title = null,
             });
             playlist.PlaylistEntries.Add(new M3uPlaylistEntry()
             {
-                Album = "Unknown",
-                AlbumArtist = "Andrea Bocelli",
-                Duration = TimeSpan.Zero,
+                Duration = 0,
                 Path = @"D:\Muzyka\Andrea Bocelli\04 E Chiove.mp3",
                 Title = "E Chiove",
             });
-            string created = content.ToText(playlist);
+            string created = content.ToString(playlist);
             string fromFile = Helpers.Read("PlaylistNotExt.m3u");
             Assert.AreEqual(created, fromFile);
         }
@@ -53,17 +46,13 @@ namespace PlaylistsNET.Tests
             playlist.IsExtended = true;
             playlist.PlaylistEntries.Add(new M3uPlaylistEntry()
             {
-                Album = "",
-                AlbumArtist = "",
-                Duration = TimeSpan.FromSeconds(254),
+                Duration = 254,
                 Path = @"D:\Muzyka\Andrea Bocelli\04 Chiara.mp3",
                 Title = "Andrea Bocelli - Chiara",
             });
             playlist.PlaylistEntries.Add(new M3uPlaylistEntry()
             {
-                Album = null,
-                AlbumArtist = null,
-                Duration = TimeSpan.FromSeconds(-1),
+                Duration = -1,
                 Path = @"D:\Muzyka\Andrea Bocelli\01 Con Te Partiro.mp3",
                 Title = "Andrea Bocelli - Con Te Partiro",
                 CustomProperties = new Dictionary<string, string>
@@ -73,13 +62,11 @@ namespace PlaylistsNET.Tests
             });
             playlist.PlaylistEntries.Add(new M3uPlaylistEntry()
             {
-                Album = "AndreaBocelli",
-                AlbumArtist = "Andrea Bocelli",
-                Duration = TimeSpan.FromSeconds(-1),
+                Duration = -1,
                 Path = @"D:\Muzyka\Andrea Bocelli\04 E Chiove.mp3",
                 Title = "Andrea Bocelli - E Chiove",
             });
-            string created = content.ToText(playlist);
+            string created = content.ToString(playlist);
             string fromFile = Helpers.Read("PlaylistExt.m3u");
             Assert.AreEqual(created, fromFile);
         }
@@ -92,40 +79,42 @@ namespace PlaylistsNET.Tests
             playlist.IsExtended = false;
             playlist.PlaylistEntries.Add(new M3uPlaylistEntry()
             {
-                Album = "",
-                AlbumArtist = "",
-                Duration = TimeSpan.Zero,
+                Duration = 0,
                 Path = @"D:\Muzyka\Andrea Bocelli\04 Chiara.mp3",
                 Title = "",
             });
             playlist.PlaylistEntries.Add(new M3uPlaylistEntry()
             {
-                Album = null,
-                AlbumArtist = null,
-                Duration = TimeSpan.Zero,
+                Duration = 0,
                 Path = @"D:\Muzyka\Andrea Bocelli\01 Con Te Partiro.mp3",
                 Title = null,
             });
             playlist.PlaylistEntries.Add(new M3uPlaylistEntry()
             {
-                Album = "Unknown",
-                AlbumArtist = "Andrea Bocelli",
-                Duration = TimeSpan.Zero,
+                Duration = 0,
                 Path = @"D:\Muzyka\Andrea Bocelli\04 E Chiove.mp3",
                 Title = "E Chiove",
             });
-            var stream = Helpers.ReadStream("PlaylistNotExt.m3u");
-            var file = content.GetFromStream(stream);
-            stream.Dispose();
-            Assert.AreEqual(playlist.IsExtended, file.IsExtended);
-            Assert.AreEqual(playlist.PlaylistEntries.Count, file.PlaylistEntries.Count);
-            Assert.AreEqual(playlist.PlaylistEntries[0].Path, file.PlaylistEntries[0].Path);
-            Assert.AreEqual(playlist.PlaylistEntries[0].Title, file.PlaylistEntries[0].Title);
-            Assert.AreEqual(playlist.PlaylistEntries[1].Path, file.PlaylistEntries[1].Path);
-            Assert.AreEqual("", file.PlaylistEntries[1].Title);
-            Assert.AreEqual(playlist.PlaylistEntries[2].Path, file.PlaylistEntries[2].Path);
-            Assert.AreNotEqual(playlist.PlaylistEntries[2].Title, file.PlaylistEntries[2].Title);
-            stream.Dispose();
+
+			using (var stream = Helpers.ReadStream("PlaylistNotExt.m3u"))
+			{
+				var file = content.GetFromStream(stream);
+
+				Assert.AreEqual(playlist.IsExtended, file.IsExtended);
+				Assert.AreEqual(playlist.PlaylistEntries.Count, file.PlaylistEntries.Count);
+
+				Assert.AreEqual(playlist.PlaylistEntries[0].Path, file.PlaylistEntries[0].Path);
+				Assert.AreNotEqual(playlist.PlaylistEntries[0].Title, file.PlaylistEntries[0].Title);
+				Assert.IsNull(file.PlaylistEntries[0].Title);
+
+				Assert.AreEqual(playlist.PlaylistEntries[1].Path, file.PlaylistEntries[1].Path);
+				Assert.AreEqual(playlist.PlaylistEntries[1].Title, file.PlaylistEntries[1].Title);
+				Assert.IsNull(file.PlaylistEntries[1].Title);
+
+				Assert.AreEqual(playlist.PlaylistEntries[2].Path, file.PlaylistEntries[2].Path);
+				Assert.AreNotEqual(playlist.PlaylistEntries[2].Title, file.PlaylistEntries[2].Title);
+				Assert.IsNull(file.PlaylistEntries[2].Title);
+			}
         }
 
         [TestMethod]
@@ -136,17 +125,13 @@ namespace PlaylistsNET.Tests
             playlist.IsExtended = true;
             playlist.PlaylistEntries.Add(new M3uPlaylistEntry()
             {
-                Album = "",
-                AlbumArtist = "",
-                Duration = TimeSpan.FromSeconds(254),
+                Duration = 254,
                 Path = @"D:\Muzyka\Andrea Bocelli\04 Chiara.mp3",
                 Title = "Andrea Bocelli - Chiara",
             });
             playlist.PlaylistEntries.Add(new M3uPlaylistEntry()
             {
-                Album = null,
-                AlbumArtist = null,
-                Duration = TimeSpan.FromSeconds(-1),
+                Duration = -1,
                 Path = @"D:\Muzyka\Andrea Bocelli\01 Con Te Partiro.mp3",
                 Title = "Andrea Bocelli - Con Te Partiro",
                 CustomProperties = new Dictionary<string, string>
@@ -156,33 +141,30 @@ namespace PlaylistsNET.Tests
             });
             playlist.PlaylistEntries.Add(new M3uPlaylistEntry()
             {
-                Album = "AndreaBocelli",
-                AlbumArtist = "Andrea Bocelli",
-                Duration = TimeSpan.FromSeconds(-1),
+                Duration = -1,
                 Path = @"D:\Muzyka\Andrea Bocelli\04 E Chiove.mp3",
                 Title = "Andrea Bocelli - E Chiove",
             });
-            var stream = Helpers.ReadStream("PlaylistExt.m3u");
-            var file = content.GetFromStream(stream);
-            stream.Dispose();
-            Assert.AreEqual(playlist.IsExtended, file.IsExtended);
-            Assert.AreEqual(playlist.PlaylistEntries.Count, file.PlaylistEntries.Count);
-            Assert.AreEqual(playlist.PlaylistEntries[0].Path, file.PlaylistEntries[0].Path);
-            Assert.AreEqual(playlist.PlaylistEntries[0].Title, file.PlaylistEntries[0].Title);
-            Assert.AreEqual(playlist.PlaylistEntries[0].Album, file.PlaylistEntries[0].Album);
-            Assert.AreEqual(playlist.PlaylistEntries[0].AlbumArtist, file.PlaylistEntries[0].AlbumArtist);
-            Assert.AreEqual(playlist.PlaylistEntries[1].Path, file.PlaylistEntries[1].Path);
-            Assert.AreEqual(playlist.PlaylistEntries[1].Title, file.PlaylistEntries[1].Title);
-            Assert.AreNotEqual(playlist.PlaylistEntries[1].Album, file.PlaylistEntries[1].Album);
-            Assert.AreNotEqual(playlist.PlaylistEntries[1].AlbumArtist, file.PlaylistEntries[1].AlbumArtist);
-            Assert.AreEqual(playlist.PlaylistEntries[1].CustomProperties.Count(), file.PlaylistEntries[1].CustomProperties.Count());
-            Assert.AreEqual(playlist.PlaylistEntries[1].CustomProperties.First().Key, file.PlaylistEntries[1].CustomProperties.First().Key);
-            Assert.AreEqual(playlist.PlaylistEntries[1].CustomProperties.First().Value, file.PlaylistEntries[1].CustomProperties.First().Value);
-            Assert.AreEqual(playlist.PlaylistEntries[2].Path, file.PlaylistEntries[2].Path);
-            Assert.AreEqual(playlist.PlaylistEntries[2].Title, file.PlaylistEntries[2].Title);
-            Assert.AreEqual(playlist.PlaylistEntries[2].Album, file.PlaylistEntries[2].Album);
-            Assert.AreEqual(playlist.PlaylistEntries[2].AlbumArtist, file.PlaylistEntries[2].AlbumArtist);
-        }
 
-    }
+			using (var stream = Helpers.ReadStream("PlaylistExt.m3u"))
+			{
+				var file = content.GetFromStream(stream);
+
+				Assert.AreEqual(playlist.IsExtended, file.IsExtended);
+				Assert.AreEqual(playlist.PlaylistEntries.Count, file.PlaylistEntries.Count);
+
+				Assert.AreEqual(playlist.PlaylistEntries[0].Path, file.PlaylistEntries[0].Path);
+				Assert.AreEqual(playlist.PlaylistEntries[0].Title, file.PlaylistEntries[0].Title);
+
+				Assert.AreEqual(playlist.PlaylistEntries[1].Path, file.PlaylistEntries[1].Path);
+				Assert.AreEqual(playlist.PlaylistEntries[1].Title, file.PlaylistEntries[1].Title);
+				Assert.AreEqual(playlist.PlaylistEntries[1].CustomProperties.Count(), file.PlaylistEntries[1].CustomProperties.Count());
+				Assert.AreEqual(playlist.PlaylistEntries[1].CustomProperties.First().Key, file.PlaylistEntries[1].CustomProperties.First().Key);
+				Assert.AreEqual(playlist.PlaylistEntries[1].CustomProperties.First().Value, file.PlaylistEntries[1].CustomProperties.First().Value);
+
+				Assert.AreEqual(playlist.PlaylistEntries[2].Path, file.PlaylistEntries[2].Path);
+				Assert.AreEqual(playlist.PlaylistEntries[2].Title, file.PlaylistEntries[2].Title);
+			}
+        }
+	}
 }

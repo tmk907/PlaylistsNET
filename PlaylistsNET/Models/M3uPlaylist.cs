@@ -1,7 +1,17 @@
-﻿namespace PlaylistsNET.Models
+﻿using System;
+using System.Collections.Generic;
+
+namespace PlaylistsNET.Models
 {
-    public class M3uPlaylist : BasePlaylist<M3uPlaylistEntry>
-    {
+	public class M3uPlaylist : BasePlaylist<M3uPlaylistEntry>
+	{
         public bool IsExtended { get; set; }
-    }
+		public string Name { get; set; }
+		public List<string> Comments { get; set; }
+
+		public M3uPlaylist()
+		{
+			Comments = new List<string>();
+		}
+	}
 }
