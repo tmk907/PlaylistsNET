@@ -10,7 +10,6 @@ namespace PlaylistsNET.Models
 		}
 
 		public bool IsExtended { get; set; }
-		public string Name { get; set; }
 		public List<string> Comments { get; set; }
 	}
 }

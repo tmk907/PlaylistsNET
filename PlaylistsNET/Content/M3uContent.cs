@@ -32,12 +32,21 @@ namespace PlaylistsNET.Content
 					{
 						sb.AppendLine($"#{currentComment}");
 					}
-
-					foreach (var customProperty in entry.Properties.Where(x => !string.IsNullOrEmpty(x.Value)))
+					if (!String.IsNullOrEmpty(entry.Album))
 					{
-						sb.AppendLine($"#{customProperty.Key}:{customProperty.Value}");
+						sb.Append("#EXTALB:").Append(entry.Album).AppendLine();
 					}
-
+					if (!String.IsNullOrEmpty(entry.AlbumArtist))
+					{
+						sb.Append("#EXTART:").Append(entry.AlbumArtist).AppendLine();
+					}
+					if (entry.CustomProperties != null)
+					{
+						foreach (var customProperty in entry.CustomProperties.Where(x => !string.IsNullOrEmpty(x.Value)))
+						{
+							sb.AppendLine($"#{customProperty.Key}:{customProperty.Value}");
+						}
+					}
 					sb.AppendLine($"#EXTINF:{(int)entry.Duration.TotalSeconds},{entry.Title}");
 				}
 				sb.AppendLine(entry.Path);
@@ -75,7 +84,7 @@ namespace PlaylistsNET.Content
 			throw new FormatException("Playlist appears to be a HLS playlist. Use the HLS parser instead.");
 		}
 
-		private M3uPlaylist GetM3u(List<string> playlistLines)
+		private M3uPlaylist GetM3u(IEnumerable<string> playlistLines)
 		{
 			var playlist = new M3uPlaylist();
 
@@ -92,13 +101,15 @@ namespace PlaylistsNET.Content
 				{
 					Path = currentLine,
 					Title = "",
+					Album = "",
+					AlbumArtist = "",
 				});
 			}
 
 			return playlist;
 		}
 
-		private M3uPlaylist GetExtM3u(List<string> playlistLines)
+		private M3uPlaylist GetExtM3u(IEnumerable<string> playlistLines)
 		{
 			var playlist = new M3uPlaylist()
 			{
@@ -106,6 +117,9 @@ namespace PlaylistsNET.Content
 			};
 
 			var currentEntry = new M3uPlaylistEntry();
+			currentEntry.Album = "";
+			currentEntry.AlbumArtist = "";
+			currentEntry.Title = "";
 			foreach (var currentLine in playlistLines)
 			{
 				var match = Regex.Match(currentLine, @"^#EXTINF:(-?\d*),(.*)$");
@@ -117,10 +131,24 @@ namespace PlaylistsNET.Content
 					continue;
 				}
 
+				match = Regex.Match(currentLine, @"^#(EXTALB):(.*)$");
+				if (match.Success)
+				{
+					currentEntry.Album = match.Groups[2].Value;
+					continue;
+				}
+
+				match = Regex.Match(currentLine, @"^#(EXTART):(.*)$");
+				if (match.Success)
+				{
+					currentEntry.AlbumArtist = match.Groups[2].Value;
+					continue;
+				}
+
 				match = Regex.Match(currentLine, @"^#(EXT.*):(.*)$");
 				if (match.Success)
 				{
-					currentEntry.Properties.Add(match.Groups[1].Value, match.Groups[2].Value);
+					currentEntry.CustomProperties.Add(match.Groups[1].Value, match.Groups[2].Value);
 					continue;
 				}
 
@@ -134,9 +162,12 @@ namespace PlaylistsNET.Content
 				currentEntry.Path = currentLine;
 				playlist.PlaylistEntries.Add(currentEntry);
 				currentEntry = new M3uPlaylistEntry();
+				currentEntry.Album = "";
+				currentEntry.AlbumArtist = "";
+				currentEntry.Title = "";
 			}
 
 			return playlist;
 		}
-    }
+	}
 }

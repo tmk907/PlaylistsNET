@@ -19,7 +19,7 @@ namespace PlaylistsNET.Tests
 				Assert.AreEqual("NO", file.AllowCache, false);
 				Assert.AreEqual(1, file.Version);
 				Assert.AreEqual(10, file.TargetDuration);
-				Assert.AreEqual(1845, file.PlaylistEntries.Count);
+				Assert.AreEqual(56, file.PlaylistEntries.Count);
 
 				var entry = file.PlaylistEntries[0];
 				Assert.AreEqual(@"METHOD=AES-128,URI=""key""", entry.Key);
