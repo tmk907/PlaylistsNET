@@ -49,11 +49,17 @@ namespace PlaylistsNET.Content
             return sb.ToString();
         }
 
-        public ZplPlaylist GetFromStream(Stream stream)
+		public ZplPlaylist GetFromStream(Stream stream)
+		{
+			StreamReader streamReader = new StreamReader(stream);
+			return GetFromString(streamReader.ReadToEnd());
+		}
+
+		public ZplPlaylist GetFromString(string playlistString)
         {
             ZplPlaylist playlist = new ZplPlaylist();
 
-            XDocument doc = XDocument.Load(stream);
+            XDocument doc = XDocument.Parse(playlistString);
             XElement mainDocument = doc.Element("smil");
             XElement head = mainDocument.Element("head");
             playlist.Author = (string)head.Element("author") ?? "";
