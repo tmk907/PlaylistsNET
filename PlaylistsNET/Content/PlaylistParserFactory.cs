@@ -18,13 +18,13 @@ namespace PlaylistsNET.Content
     {
 		public static IPlaylistParser<IBasePlaylist> GetPlaylistParser(string fileType)
 		{
-			fileType = fileType.Trim('.').ToLower();
+            fileType = fileType.Trim('.');
             try
             {
                 var type = (PlaylistType)Enum.Parse(typeof(PlaylistType), fileType, true);
                 return GetPlaylistParser(type);
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 throw new ArgumentException($"Unsupported playlist extension: {fileType}");
             }
