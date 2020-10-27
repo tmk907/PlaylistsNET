@@ -29,13 +29,6 @@ namespace PlaylistsNET.Content
 			// Remove "#EXTM3U" as it is no longer needed
 			playlistLines.RemoveAt(0);
 
-			// EXT playlist, but not HLS playlist, parse with the EXT parser
-			var isHls = playlistLines.Where(x => Regex.IsMatch(x, @"^#EXT-X-VERSION:\d$")).Any();
-			if (!isHls)
-			{
-				throw new FormatException("Playlist missing required EXT-X-VERSION tag.");
-			}
-
 			// HLS Master, not Media
 			var isMaster = playlistLines.Where(x => Regex.IsMatch(x, @"^#EXT-X-STREAM-INF:.+$")).Any();
 			isMaster = isMaster || playlistLines.Where(x => Regex.IsMatch(x, @"^#EXT-X-MEDIA:(.*)$")).Any();
@@ -210,13 +203,6 @@ namespace PlaylistsNET.Content
 
 			// Remove "#EXTM3U" as it is no longer needed
 			playlistLines.RemoveAt(0);
-
-			// EXT playlist, but not HLS playlist, parse with the EXT parser
-			var isHls = playlistLines.Where(x => Regex.IsMatch(x, @"^#EXT-X-VERSION:\d$")).Any();
-			if (!isHls)
-			{
-				throw new FormatException("Playlist missing required EXT-X-VERSION tag.");
-			}
 
 			// HLS Media playlist, not Master
 			var isMedia = playlistLines.Where(x => Regex.IsMatch(x, @"^#EXTINF:.+$")).Any();

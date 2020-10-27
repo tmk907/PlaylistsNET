@@ -63,9 +63,6 @@ namespace PlaylistsNET.Tests
 
 			var playlistString = "this is not a playlist";
 			Assert.ThrowsException<FormatException>(() => content.GetFromString(playlistString));
-
-			playlistString = "#EXTM3U";
-			Assert.ThrowsException<FormatException>(() => content.GetFromString(playlistString));
 		}
 
 		[TestMethod]
@@ -84,6 +81,32 @@ namespace PlaylistsNET.Tests
 
 			var playlistString = "#EXTM3U\r\n#EXT-X-VERSION:1\r\n#EXT-X-STREAM-INF:BANDWIDTH=124000";
 			Assert.ThrowsException<FormatException>(() => content.GetFromString(playlistString));
+		}
+
+		[TestMethod]
+		public void HlsMediaContent_GetFromString_doesnt_require_EXT_X_Version()
+		{
+			var content = new HlsMediaContent();
+
+			var playlistString = @"
+#EXTM3U
+#EXTINF:15.958,
+random01.aac";
+			var mediaPlaylist = content.GetFromString(playlistString);
+			Assert.IsNotNull(mediaPlaylist);
+		}
+
+		[TestMethod]
+		public void HlsMasterContent_GetFromString_doesnt_require_EXT_X_Version()
+		{
+			var content = new HlsMasterContent();
+
+			var playlistString = @"
+#EXTM3U
+#EXT-X-STREAM-INF:BANDWIDTH=54000,CODECS=""mp4a.40.5""
+folder/random.m3u8";
+			var mediaPlaylist = content.GetFromString(playlistString);
+			Assert.IsNotNull(mediaPlaylist);
 		}
 	}
 }
