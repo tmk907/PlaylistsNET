@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 using PlaylistsNET.Models;
@@ -75,7 +76,7 @@ namespace PlaylistsNET.Content
 			playlistLines.RemoveAt(0);
 
 			// EXT playlist, but not HLS playlist, parse with the EXT parser
-			var isHls = playlistLines.Where(x => Regex.IsMatch(x, @"^#EXT-X-VERSION:\d$")).Any();
+			var isHls = playlistLines.Any(x => Regex.IsMatch(x, @"^#EXT-X-VERSION:\d$"));
 			if (!isHls)
 			{
 				return GetExtM3u(playlistLines);
@@ -111,15 +112,12 @@ namespace PlaylistsNET.Content
 
 		private M3uPlaylist GetExtM3u(IEnumerable<string> playlistLines)
 		{
-			var playlist = new M3uPlaylist()
+			var playlist = new M3uPlaylist
 			{
 				IsExtended = true,
 			};
 
-			var currentEntry = new M3uPlaylistEntry();
-			currentEntry.Album = "";
-			currentEntry.AlbumArtist = "";
-			currentEntry.Title = "";
+			var currentEntry = new M3uPlaylistEntry {Album = "", AlbumArtist = "", Title = ""};
 			foreach (var currentLine in playlistLines)
 			{
 				var match = Regex.Match(currentLine, @"^#EXTINF:(-?\d*),(.*)$");
@@ -159,7 +157,7 @@ namespace PlaylistsNET.Content
 					continue;
 				}
 
-				currentEntry.Path = currentLine;
+				currentEntry.Path = WebUtility.UrlDecode(currentLine);
 				playlist.PlaylistEntries.Add(currentEntry);
 				currentEntry = new M3uPlaylistEntry();
 				currentEntry.Album = "";
