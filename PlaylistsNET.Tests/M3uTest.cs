@@ -194,5 +194,28 @@ namespace PlaylistsNET.Tests
                 Assert.AreEqual(playlist.PlaylistEntries[2].AlbumArtist, file.PlaylistEntries[2].AlbumArtist);
             }
         }
+
+        [TestMethod]
+        public void GetFromStream_ReadVLCPlaylistExtendedAndCompareWithObject_Equal()
+        {
+            var entry = new M3uPlaylistEntry
+            {
+                Album = null,
+                AlbumArtist = null,
+                Duration = TimeSpan.FromSeconds(304),
+                Path = "Aimer/春はゆく - marie/01 - 春はゆく.flac",
+                Title = "Aimer - 春はゆく",                
+            };
+            
+            var content = new M3uContent();
+            using (var stream = Helpers.ReadStream("PlaylistVLC.m3u"))
+            {
+                var file = content.GetFromStream(stream);
+                var fileEntry = file.PlaylistEntries[0];
+                
+                Assert.AreEqual(entry.Path, fileEntry.Path);
+                Assert.AreEqual(entry.Title, fileEntry.Title);
+            }
+        }
 	}
 }

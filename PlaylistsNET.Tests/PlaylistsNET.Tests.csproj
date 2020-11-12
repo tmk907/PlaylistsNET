@@ -116,6 +116,9 @@
     <Content Include="Examples\PlaylistNotExt.m3u">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Examples\PlaylistVLC.m3u">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PlaylistsNET\PlaylistsNET.csproj">
