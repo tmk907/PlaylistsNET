@@ -19,7 +19,7 @@ namespace PlaylistsNET.Models
 	{
 		public int Duration { get; set; }
 		public string Title { get; set; }
-		public int MediaSequence { get; set; }
+		public long MediaSequence { get; set; }
 		public bool Discontinuity { get; set; }
 		public string ByteRange { get; set; }
 		public string Key { get; set; }

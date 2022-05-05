@@ -82,16 +82,16 @@ namespace PlaylistsNET.Content
 				hlsMatch = Regex.Match(currentLine, @"^#EXT-X-MEDIA-SEQUENCE:(\d*)$");
 				if (hlsMatch.Success)
 				{
-					var mediaSequence = int.Parse(hlsMatch.Groups[1].Value);
-					playlist.MediaSequence = mediaSequence;
-					currentEntry.MediaSequence = mediaSequence;
+                    var mediaSequence = long.Parse(hlsMatch.Groups[1].Value);
+                    playlist.MediaSequence = mediaSequence;
+                    currentEntry.MediaSequence = mediaSequence;
 					continue;
 				}
 
 				hlsMatch = Regex.Match(currentLine, @"^#EXT-X-DISCONTINUITY-SEQUENCE:(\d*)$");
 				if (hlsMatch.Success)
 				{
-					playlist.DiscontinuitySequence = int.Parse(hlsMatch.Groups[1].Value);
+					playlist.DiscontinuitySequence = long.Parse(hlsMatch.Groups[1].Value);
 					continue;
 				}
 
