@@ -41,7 +41,7 @@ namespace PlaylistsNET.Models
 			Media = new List<string>();
 			IFrameStreamInf = new List<string>();
 			SessionData = new List<string>();
-			SessionData = new List<string>();
+			SessionKey = new List<string>();
 		}
 	}
 }

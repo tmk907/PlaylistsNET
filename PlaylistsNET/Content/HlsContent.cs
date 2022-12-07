@@ -8,9 +8,98 @@ using System.Text.RegularExpressions;
 
 namespace PlaylistsNET.Content
 {
-	public class HlsMediaContent : IPlaylistParser<HlsMediaPlaylist>
+	public class HlsMediaWriter
 	{
-		public HlsMediaPlaylist GetFromStream(Stream stream)
+        protected void AppendGeneralHeaders<T, U>(T playlist, ref StringBuilder sb)
+			where T : HlsPlaylist<U>
+			where U : HlsPlaylistEntry
+        {
+            // HLS requires this line as the first line of playlist
+            sb.AppendLine("#EXTM3U");
+            // VERSION always required
+            sb.AppendLine($"#EXT-X-VERSION:{playlist.Version}");
+
+            CheckNullAndAppend("#EXT-X-ALLOW-CACHE", playlist.AllowCache, sb);
+
+            foreach (var currentComment in playlist.Comments)
+            {
+                sb.AppendLine($"#{currentComment}");
+            }
+        }
+        protected void CheckAndAppend<T>(string tag,
+			T element,
+			StringBuilder sb,
+			Func<T, bool> validator)
+        {
+            if (validator(element) == true)
+            {
+                sb.AppendLine($"{tag}:{element}");
+            }
+        }
+
+        protected void CheckNullAndAppend<T>(string tag,
+            T element,
+            StringBuilder sb)
+        {
+            CheckAndAppend(tag, element, sb, e => e != null);
+        }
+
+        protected void CheckEmptyStringAndAppend(string tag,
+            string element,
+            StringBuilder sb)
+        {
+            CheckAndAppend(tag, element, sb, e => !String.IsNullOrEmpty(e));
+        }
+    }
+	public class HlsMediaContent : HlsMediaWriter,
+		IPlaylistParser<HlsMediaPlaylist>,
+		IPlaylistWriter<HlsMediaPlaylist>
+    {
+		        public string ToText(HlsMediaPlaylist playlist)
+        {
+            StringBuilder sb = new StringBuilder();
+
+            AppendGeneralHeaders<HlsMediaPlaylist, HlsMediaPlaylistEntry>(playlist, ref sb);
+
+            // Media playlist tags only
+            CheckNullAndAppend("#EXT-X-TARGETDURATION", playlist.TargetDuration, sb);
+            sb.AppendLine($"#EXT-X-MEDIA-SEQUENCE:{playlist.MediaSequence}");
+            CheckNullAndAppend("#EXT-X-DISCONTINUITY-SEQUENCE", playlist.DiscontinuitySequence, sb);
+            CheckEmptyStringAndAppend("#EXT-X-PLAYLIST-TYPE", playlist.PlaylistType, sb);
+
+            if (playlist.IFramesOnly)
+            {
+                sb.AppendLine("#EXT-X-I-FRAMES-ONLY");
+            }
+
+            string key = "";
+            string map = "";
+
+            foreach (HlsMediaPlaylistEntry entry in playlist.PlaylistEntries)
+            {
+                if (!String.IsNullOrEmpty(entry.Key) && !entry.Key.Equals(key))
+                {
+                    sb.AppendLine($"#EXT-X-KEY:{entry.Key}");
+                    key = entry.Key;
+                }
+
+                if (!String.IsNullOrEmpty(entry.Map) && !entry.Map.Equals(map))
+                {
+                    sb.AppendLine($"#EXT-X-MAP:{entry.Map}");
+                    map = entry.Map;
+                }
+
+                sb.Append(entry.ToString());
+            }
+
+            if (playlist.EndList)
+            {
+                sb.AppendLine("#EXT-X-ENDLIST");
+            }
+
+            return sb.ToString();
+        }
+        public HlsMediaPlaylist GetFromStream(Stream stream)
 		{
 			StreamReader streamReader = new StreamReader(stream);
 			return GetFromString(streamReader.ReadToEnd());
@@ -190,9 +279,46 @@ namespace PlaylistsNET.Content
 		}
 	}
 
-	public class HlsMasterContent : IPlaylistParser<HlsMasterPlaylist>
-	{
-		public HlsMasterPlaylist GetFromStream(Stream stream)
+	public class HlsMasterContent : HlsMediaWriter,
+		IPlaylistParser<HlsMasterPlaylist>,
+        IPlaylistWriter<HlsMasterPlaylist>
+    {
+        public string ToText(HlsMasterPlaylist playlist)
+        {
+            StringBuilder sb = new StringBuilder();
+
+            AppendGeneralHeaders<HlsMasterPlaylist, HlsMasterPlaylistEntry>(playlist, ref sb);
+
+            // Master playlist-wide tags
+            playlist.Media.ForEach(media =>
+            {
+                sb.AppendLine($"#EXT-X-MEDIA:{media}");
+            });
+
+            playlist.IFrameStreamInf.ForEach(iFrameStreamInf =>
+            {
+                sb.AppendLine($"#EXT-X-I-FRAME-STREAM-INF:{iFrameStreamInf}");
+            });
+
+            playlist.SessionData.ForEach(sessionData =>
+            {
+                sb.AppendLine($"#EXT-X-SESSION-DATA:{sessionData}");
+            });
+
+            playlist.SessionKey.ForEach(sessionKey =>
+            {
+                sb.AppendLine($"#EXT-X-SESSION-KEY:{sessionKey}");
+            });
+
+            // Handle master playlist entries
+            foreach (HlsMasterPlaylistEntry entry in playlist.PlaylistEntries)
+            {
+                sb.Append(entry.ToString());
+            }
+
+            return sb.ToString();
+        }
+        public HlsMasterPlaylist GetFromStream(Stream stream)
 		{
 			StreamReader streamReader = new StreamReader(stream);
 			return GetFromString(streamReader.ReadToEnd());
@@ -223,7 +349,7 @@ namespace PlaylistsNET.Content
 			isMedia = isMedia || playlistLines.Where(x => Regex.IsMatch(x, @"^#EXT-X-TARGETDURATION:(\d*)$")).Any();
 			isMedia = isMedia || playlistLines.Where(x => Regex.IsMatch(x, @"^#EXT-X-MEDIA-SEQUENCE:(\d*)$")).Any();
 			isMedia = isMedia || playlistLines.Where(x => Regex.IsMatch(x, @"^#EXT-X-DISCONTINUITY-SEQUENCE:(\d*)$")).Any();
-			isMedia = isMedia || playlistLines.Where(x => Regex.IsMatch(x, @"^EXT-X-PLAYLIST-TYPE:(.*)$")).Any();
+			isMedia = isMedia || playlistLines.Where(x => Regex.IsMatch(x, @"^#EXT-X-PLAYLIST-TYPE:(.*)$")).Any();
 			isMedia = isMedia || playlistLines.Where(x => Regex.IsMatch(x, @"^#EXT-X-ENDLIST$")).Any();
 			isMedia = isMedia || playlistLines.Where(x => Regex.IsMatch(x, @"^#EXT-X-I-FRAMES-ONLY$")).Any();
 			if (isMedia)
