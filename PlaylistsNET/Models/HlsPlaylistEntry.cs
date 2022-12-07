@@ -4,21 +4,21 @@ using System.Text;
 
 namespace PlaylistsNET.Models
 {
-	public abstract class HlsPlaylistEntry : BasePlaylistEntry
-	{
-		public Dictionary<string, string> CustomProperties { get; set; }
-		public List<string> Comments { get; set; }
+    public abstract class HlsPlaylistEntry : BasePlaylistEntry
+    {
+        public Dictionary<string, string> CustomProperties { get; set; }
+        public List<string> Comments { get; set; }
 
-		public HlsPlaylistEntry()
-		{
-			CustomProperties = new Dictionary<string, string>();
-			Comments = new List<string>();
-		}
+        public HlsPlaylistEntry()
+        {
+            CustomProperties = new Dictionary<string, string>();
+            Comments = new List<string>();
+        }
 
         protected abstract void CheckAndAppend<T>(string tag,
-			T element,
-			StringBuilder sb,
-			Func<T, bool> validator);
+            T element,
+            StringBuilder sb,
+            Func<T, bool> validator);
 
         protected void CheckNullAndAppend<T>(string tag,
             T element,
@@ -35,83 +35,83 @@ namespace PlaylistsNET.Models
         }
     }
 
-	public class HlsMediaPlaylistEntry : HlsPlaylistEntry
-	{
-		public int Duration { get; set; }
-		public string Title { get; set; }
-		public long MediaSequence { get; set; }
-		public bool Discontinuity { get; set; }
-		public string ByteRange { get; set; }
-		public string Key { get; set; }
-		public string Map { get; set; }
-		public DateTime? ProgramDateTime { get; set; }
+    public class HlsMediaPlaylistEntry : HlsPlaylistEntry
+    {
+        public int Duration { get; set; }
+        public string Title { get; set; }
+        public long MediaSequence { get; set; }
+        public bool Discontinuity { get; set; }
+        public string ByteRange { get; set; }
+        public string Key { get; set; }
+        public string Map { get; set; }
+        public DateTime? ProgramDateTime { get; set; }
 
-		public HlsMediaPlaylistEntry() : base() { }
+        public HlsMediaPlaylistEntry() : base() { }
 
         protected override void CheckAndAppend<T>(string tag,
-			T element,
-			StringBuilder sb,
-			Func<T, bool> validator)
+            T element,
+            StringBuilder sb,
+            Func<T, bool> validator)
         {
             if (validator(element) == true)
             {
                 sb.AppendLine($"{tag}:{element}");
             }
-		}
+        }
 
-		public override string ToString()
+        public override string ToString()
         {
             StringBuilder sb = new StringBuilder();
 
-			CheckEmptyStringAndAppend("#EXT-X-BYTERANGE", ByteRange, sb);
-			CheckNullAndAppend("#EXT-X-PROGRAM-DATE-TIME", ProgramDateTime?.ToString("o"), sb);
+            CheckEmptyStringAndAppend("#EXT-X-BYTERANGE", ByteRange, sb);
+            CheckNullAndAppend("#EXT-X-PROGRAM-DATE-TIME", ProgramDateTime?.ToString("o"), sb);
 
-			if(Discontinuity)
-			{
-				sb.AppendLine("#EXT-X-DISCONTINUITY");
-			}
+            if(Discontinuity)
+            {
+                sb.AppendLine("#EXT-X-DISCONTINUITY");
+            }
 
-			string durationTitle = String.Join(",",
-				new string[] { Duration == 0 ? "" : Duration.ToString(), Title });
-			CheckAndAppend("#EXTINF", durationTitle, sb, dt => !dt.Equals(","));
+            string durationTitle = String.Join(",",
+                new string[] { Duration == 0 ? "" : Duration.ToString(), Title });
+            CheckAndAppend("#EXTINF", durationTitle, sb, dt => !dt.Equals(","));
 
-			foreach(var kv in CustomProperties)
-			{
-				sb.AppendLine($"#EXT{kv.Key}:{kv.Value}");
-			}
+            foreach(var kv in CustomProperties)
+            {
+                sb.AppendLine($"#EXT{kv.Key}:{kv.Value}");
+            }
 
-			Comments.ForEach(comment => sb.AppendLine($"#{comment}"));
+            Comments.ForEach(comment => sb.AppendLine($"#{comment}"));
 
-			sb.AppendLine(Path.TrimEnd());
+            sb.AppendLine(Path.TrimEnd());
 
-			return sb.ToString();
+            return sb.ToString();
         }
     }
 
-	public class HlsMasterPlaylistEntry : HlsPlaylistEntry
-	{
-		[Obsolete("The PROGRAM-ID attribute of the EXT-X-STREAM-INF tag was removed in protocol version 6.")]
-		public int? ProgramId { get; set; }
-		public int Bandwidth { get; set; }
-		public int? AverageBandwidth { get; set; }
-		public List<string> Codecs { get; set; }
-		public string Resolution { get; set; }
-		public double? FrameRate { get; set; }
-		public string HdcpLevel { get; set; }
-		public string Audio { get; set; }
-		public string Video { get; set; }
-		public string Subtitles { get; set; }
-		public string ClosedCaptions { get; set; }
+    public class HlsMasterPlaylistEntry : HlsPlaylistEntry
+    {
+        [Obsolete("The PROGRAM-ID attribute of the EXT-X-STREAM-INF tag was removed in protocol version 6.")]
+        public int? ProgramId { get; set; }
+        public int Bandwidth { get; set; }
+        public int? AverageBandwidth { get; set; }
+        public List<string> Codecs { get; set; }
+        public string Resolution { get; set; }
+        public double? FrameRate { get; set; }
+        public string HdcpLevel { get; set; }
+        public string Audio { get; set; }
+        public string Video { get; set; }
+        public string Subtitles { get; set; }
+        public string ClosedCaptions { get; set; }
 
-		public HlsMasterPlaylistEntry() : base()
-		{
-			Codecs = new List<string>();
-		}
+        public HlsMasterPlaylistEntry() : base()
+        {
+            Codecs = new List<string>();
+        }
 
         protected override void CheckAndAppend<T>(string tag,
-			T element,
-			StringBuilder sb,
-			Func<T, bool> validator)
+            T element,
+            StringBuilder sb,
+            Func<T, bool> validator)
         {
             if (validator(element) == true)
             {
@@ -120,12 +120,12 @@ namespace PlaylistsNET.Models
         }
 
         public override string ToString()
-		{
-			StringBuilder sb = new StringBuilder();
+        {
+            StringBuilder sb = new StringBuilder();
 
-			sb.Append("#EXT-X-STREAM-INF:");
-			CheckNullAndAppend("PROGRAM-ID", ProgramId, sb);
-			sb.Append($"BANDWIDTH={Bandwidth},");
+            sb.Append("#EXT-X-STREAM-INF:");
+            CheckNullAndAppend("PROGRAM-ID", ProgramId, sb);
+            sb.Append($"BANDWIDTH={Bandwidth},");
             CheckNullAndAppend("AVERAGE-BANDWIDTH", AverageBandwidth, sb);
             CheckEmptyStringAndAppend("CODECS", $"\"{String.Join(",", Codecs)}\"", sb);
             CheckEmptyStringAndAppend("RESOLUTION", Resolution, sb);
@@ -136,16 +136,16 @@ namespace PlaylistsNET.Models
             CheckEmptyStringAndAppend("SUBTITLES", Subtitles, sb);
             CheckEmptyStringAndAppend("CLOSED-CAPTIONS", ClosedCaptions, sb);
 
-			int last = sb.Length - 1;
-			if(sb[last] == ',')
-			{
-				sb.Remove(last, 1);
-			}
+            int last = sb.Length - 1;
+            if(sb[last] == ',')
+            {
+                sb.Remove(last, 1);
+            }
 
-			sb.AppendLine();
-			sb.AppendLine(Path);
+            sb.AppendLine();
+            sb.AppendLine(Path);
 
-			return sb.ToString();
-		}
-	}
+            return sb.ToString();
+        }
+    }
 }

@@ -7,6 +7,6 @@ namespace PlaylistsNET.Content
     {
         T GetFromStream(Stream stream);
 
-		T GetFromString(string playlistString);
+        T GetFromString(string playlistString);
     }
 }

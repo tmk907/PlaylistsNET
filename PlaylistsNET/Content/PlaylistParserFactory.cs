@@ -3,21 +3,21 @@ using System;
 
 namespace PlaylistsNET.Content
 {
-	public enum PlaylistType
-	{
-		M3U,
-		M3U8,
-		HLSMaster,
-		HlsMedia,
-		PLS,
-		WPL,
-		ZPL
-	}
+    public enum PlaylistType
+    {
+        M3U,
+        M3U8,
+        HLSMaster,
+        HlsMedia,
+        PLS,
+        WPL,
+        ZPL
+    }
 
     public class PlaylistParserFactory
     {
-		public static IPlaylistParser<IBasePlaylist> GetPlaylistParser(string fileType)
-		{
+        public static IPlaylistParser<IBasePlaylist> GetPlaylistParser(string fileType)
+        {
             fileType = fileType.Trim('.');
             try
             {
@@ -28,9 +28,9 @@ namespace PlaylistsNET.Content
             {
                 throw new ArgumentException($"Unsupported playlist extension: {fileType}");
             }
-		}
+        }
 
-		public static IPlaylistParser<IBasePlaylist> GetPlaylistParser(PlaylistType playlistType)
+        public static IPlaylistParser<IBasePlaylist> GetPlaylistParser(PlaylistType playlistType)
         {
             IPlaylistParser<IBasePlaylist> playlistParser;
 
@@ -38,14 +38,14 @@ namespace PlaylistsNET.Content
             {
                 case PlaylistType.M3U:
                 case PlaylistType.M3U8:
-					playlistParser = new M3uContent();
+                    playlistParser = new M3uContent();
                     break;
-				case PlaylistType.HLSMaster:
-					playlistParser = new HlsMasterContent();
-					break;
-				case PlaylistType.HlsMedia:
-					playlistParser = new HlsMediaContent();
-					break;
+                case PlaylistType.HLSMaster:
+                    playlistParser = new HlsMasterContent();
+                    break;
+                case PlaylistType.HlsMedia:
+                    playlistParser = new HlsMediaContent();
+                    break;
                 case PlaylistType.PLS:
                     playlistParser = new PlsContent();
                     break;
@@ -56,7 +56,7 @@ namespace PlaylistsNET.Content
                     playlistParser = new ZplContent();
                     break;
                 default:
-					throw new ArgumentException($"Unsupported playlist type: {playlistType}");
+                    throw new ArgumentException($"Unsupported playlist type: {playlistType}");
             }
             return playlistParser;
         }
