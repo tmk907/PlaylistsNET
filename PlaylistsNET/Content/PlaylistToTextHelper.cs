@@ -26,6 +26,14 @@ namespace PlaylistsNET.Content
                     var zplWriter = new ZplContent();
                     text = zplWriter.ToText(zpl);
                     break;
+                case HlsMasterPlaylist hls:
+                    var hlsMasterWriter = new HlsMasterContent();
+                    text = hlsMasterWriter.ToText(hls);
+                    break;
+                case HlsMediaPlaylist hls:
+                    var hlsMediaWriter = new HlsMediaContent();
+                    text = hlsMediaWriter.ToText(hls);
+                    break;
                 default:
                     break;
             }

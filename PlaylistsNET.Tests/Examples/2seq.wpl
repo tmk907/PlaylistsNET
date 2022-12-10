@@ -1,33 +1,33 @@
 <?wpl version="1.0"?>
 <smil>
-	<head>
-		<author />
-		<guid>{80034981-91E5-45A6-9895-5447D7463CDE}</guid>
-		<meta name="totalDuration" content="0" />
-		<meta name="ItemCount" content="46" />
-		<meta name="Generator" content="Entertainment Platform -- 3.6.2304.0" />
-		<title>Eurowizja do nagrania</title>
-		</head>
-	<body>
-		<seq>
-			<media src="D:\Tak to Było\22-05-2010\Allisons - Are You Sure.wav" albumTitle="Nieznany album" albumArtist="Nieznany wykonawca" trackTitle="Allisons - Are You Sure" trackArtist="Nieznany wykonawca" />
-			<media src="D:\Tak to Było\29-05-2010\ABBA - Waterloo.wav" albumTitle="Nieznany album" albumArtist="Nieznany wykonawca" trackTitle="ABBA - Waterloo" trackArtist="Nieznany wykonawca" />
-		</seq>
-		<seq>
-			<smartPlaylist version="1.0.0.0">
-				<querySet>
-					<sourceFilter id="{4202947A-A563-4B05-A754-A1B4B5989849}" name="Muzyka w mojej bibliotece">
-						<fragment name="Last play date">
-							<argument name="condition">Is Before</argument>
-							<argument name="value">Last month</argument>
-						</fragment>
-					</sourceFilter>
-				</querySet>
-			</smartPlaylist>
-		</seq>
-		<seq>
-			<media src="D:\Tak to Było\29-05-2010\Bobbysocks - La Det Swinge.wav" albumTitle="Nieznany album" albumArtist="Nieznany wykonawca" trackTitle="Bobbysocks - La Det Swinge" trackArtist="Nieznany wykonawca" />
-			<media src="D:\Tak to Było\29-05-2010\Brotherhood of Man - Save Your Kisses For Me.wav" albumTitle="Nieznany album" albumArtist="Nieznany wykonawca" trackTitle="Brotherhood of Man - Save Your Kisses For Me" trackArtist="Nieznany wykonawca" />
-	  </seq>
-	</body>
+    <head>
+        <author />
+        <guid>{80034981-91E5-45A6-9895-5447D7463CDE}</guid>
+        <meta name="totalDuration" content="0" />
+        <meta name="ItemCount" content="46" />
+        <meta name="Generator" content="Entertainment Platform -- 3.6.2304.0" />
+        <title>Eurowizja do nagrania</title>
+        </head>
+    <body>
+        <seq>
+            <media src="D:\Tak to Było\22-05-2010\Allisons - Are You Sure.wav" albumTitle="Nieznany album" albumArtist="Nieznany wykonawca" trackTitle="Allisons - Are You Sure" trackArtist="Nieznany wykonawca" />
+            <media src="D:\Tak to Było\29-05-2010\ABBA - Waterloo.wav" albumTitle="Nieznany album" albumArtist="Nieznany wykonawca" trackTitle="ABBA - Waterloo" trackArtist="Nieznany wykonawca" />
+        </seq>
+        <seq>
+            <smartPlaylist version="1.0.0.0">
+                <querySet>
+                    <sourceFilter id="{4202947A-A563-4B05-A754-A1B4B5989849}" name="Muzyka w mojej bibliotece">
+                        <fragment name="Last play date">
+                            <argument name="condition">Is Before</argument>
+                            <argument name="value">Last month</argument>
+                        </fragment>
+                    </sourceFilter>
+                </querySet>
+            </smartPlaylist>
+        </seq>
+        <seq>
+            <media src="D:\Tak to Było\29-05-2010\Bobbysocks - La Det Swinge.wav" albumTitle="Nieznany album" albumArtist="Nieznany wykonawca" trackTitle="Bobbysocks - La Det Swinge" trackArtist="Nieznany wykonawca" />
+            <media src="D:\Tak to Było\29-05-2010\Brotherhood of Man - Save Your Kisses For Me.wav" albumTitle="Nieznany album" albumArtist="Nieznany wykonawca" trackTitle="Brotherhood of Man - Save Your Kisses For Me" trackArtist="Nieznany wykonawca" />
+      </seq>
+    </body>
 </smil>

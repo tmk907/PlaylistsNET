@@ -36,32 +36,32 @@ namespace PlaylistsNET.Content
             return sb.ToString();
         }
 
-		public PlsPlaylist GetFromStream(Stream stream)
-		{
-			StreamReader streamReader = new StreamReader(stream);
-			return GetFromString(streamReader.ReadToEnd());
-		}
+        public PlsPlaylist GetFromStream(Stream stream)
+        {
+            StreamReader streamReader = new StreamReader(stream);
+            return GetFromString(streamReader.ReadToEnd());
+        }
 
         public PlsPlaylist GetFromString(string playlistString)
         {
             PlsPlaylist playlist = new PlsPlaylist();
             playlist.Version = 2;
 
-			var playlistLines = playlistString.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries).Select(x => x.Trim()).ToList();
+            var playlistLines = playlistString.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries).Select(x => x.Trim()).ToList();
 
-			// If there are no lines to parse, return the empty playlist
-			if (playlistLines.Count == 0)
-			{
-				return playlist;
-			}
+            // If there are no lines to parse, return the empty playlist
+            if (playlistLines.Count == 0)
+            {
+                return playlist;
+            }
 
-			// Verify header is [playlist] and return if not
-			if (playlistLines[0] != "[playlist]")
-			{
-				return playlist;
-			}
+            // Verify header is [playlist] and return if not
+            if (playlistLines[0] != "[playlist]")
+            {
+                return playlist;
+            }
 
-			foreach (var line in playlistLines)
+            foreach (var line in playlistLines)
             {
                 int nr = GetNr(line);
                 if (line.StartsWith("File"))

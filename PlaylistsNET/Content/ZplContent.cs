@@ -49,13 +49,13 @@ namespace PlaylistsNET.Content
             return sb.ToString();
         }
 
-		public ZplPlaylist GetFromStream(Stream stream)
-		{
-			StreamReader streamReader = new StreamReader(stream);
-			return GetFromString(streamReader.ReadToEnd());
-		}
+        public ZplPlaylist GetFromStream(Stream stream)
+        {
+            StreamReader streamReader = new StreamReader(stream);
+            return GetFromString(streamReader.ReadToEnd());
+        }
 
-		public ZplPlaylist GetFromString(string playlistString)
+        public ZplPlaylist GetFromString(string playlistString)
         {
             ZplPlaylist playlist = new ZplPlaylist();
 

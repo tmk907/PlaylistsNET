@@ -49,17 +49,17 @@ namespace PlaylistsNET.Content
             return sb.ToString();
         }
 
-		public WplPlaylist GetFromStream(Stream stream)
-		{
-			StreamReader streamReader = new StreamReader(stream);
-			return GetFromString(streamReader.ReadToEnd());
-		}
+        public WplPlaylist GetFromStream(Stream stream)
+        {
+            StreamReader streamReader = new StreamReader(stream);
+            return GetFromString(streamReader.ReadToEnd());
+        }
 
-		public WplPlaylist GetFromString(string playlistString)
+        public WplPlaylist GetFromString(string playlistString)
         {
             WplPlaylist playlist = new WplPlaylist();
 
-			XDocument doc = XDocument.Parse(playlistString);
+            XDocument doc = XDocument.Parse(playlistString);
             XElement mainDocument = doc.Element("smil");
             XElement head = mainDocument.Element("head");
             playlist.Author = (string)head.Element("author") ?? "";
