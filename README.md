@@ -2,6 +2,10 @@
 
 Simple library for reading and writing playlist's files. Supported formats: m3u, pls, wpl, zpl.
 
+## Install
+
+[![Nuget](https://img.shields.io/nuget/v/PlaylistsNet)](https://img.shields.io/nuget/v/PlaylistsNet) [https://www.nuget.org/packages/PlaylistsNET](https://www.nuget.org/packages/PlaylistsNET)
+
 ## Examples
 
 ### Read
