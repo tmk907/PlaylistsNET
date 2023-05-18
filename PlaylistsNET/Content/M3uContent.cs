@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 using PlaylistsNET.Models;
@@ -157,7 +156,7 @@ namespace PlaylistsNET.Content
                     continue;
                 }
 
-                currentEntry.Path = WebUtility.UrlDecode(currentLine);
+                currentEntry.Path = Utils.Utils.DecodePath(currentLine);
                 playlist.PlaylistEntries.Add(currentEntry);
                 currentEntry = new M3uPlaylistEntry();
                 currentEntry.Album = "";

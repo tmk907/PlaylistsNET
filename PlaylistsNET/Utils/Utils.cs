@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Net;
 
 namespace PlaylistsNET.Utils
 {
@@ -109,6 +110,19 @@ namespace PlaylistsNET.Utils
         {
             if (content == null) return null;
             return content.Replace("&", "&amp;").Replace("'", "&apos;").Replace("\"", "&quot;").Replace(">", "&gt;").Replace("<", "&lt;");
+        }
+
+        public static string DecodePath(string path)
+        {
+            var decoded = WebUtility.UrlDecode(path);
+            if (path.Replace('+', ' ') == decoded)
+            {
+                return path;
+            }
+            else
+            {
+                return decoded;
+            }
         }
     }
 }

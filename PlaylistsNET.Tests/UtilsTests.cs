@@ -145,5 +145,34 @@ namespace PlaylistsNET.Tests
             path = Utils.Utils.MakeRelativePath(folderPath, filePath);
             Assert.AreEqual(path, expectedPath);
         }
+
+        [TestMethod]
+        [DataRow(@"D:\Muzyka\Andrea Bocelli\04 E Chiove.mp3", @"D:\Muzyka\Andrea Bocelli\04 E Chiove.mp3")]
+        [DataRow("HLS_9506_256k_v3/9506_256k_large_v3.m3u8", "HLS_9506_256k_v3/9506_256k_large_v3.m3u8")]
+        [DataRow(@".\C+C Music\01 - (Dance Now).mp3", @".\C+C Music\01 - (Dance Now).mp3")]
+        [DataRow("Aimer/%E6%98%A5%E3%81%AF%E3%82%86%E3%81%8F%20-%20marie/01%20-%20%E6%98%A5", "Aimer/春はゆく - marie/01 - 春")]
+        [DataRow("Aimer+/%E6%98%A5%E3%81%AF%E3%82%86%E3%81%8F%20-%20marie/01%20-%20%E6%98%A5", "Aimer /春はゆく - marie/01 - 春")]
+        [DataRow("title c++.mp3", "title c++.mp3")]
+        [DataRow("title%20.mp3", "title .mp3")]
+        [DataRow("title%.mp3", "title%.mp3")]
+        [DataRow("%A%B.mp3", "%A%B.mp3")]
+        [DataRow("%FG.mp3", "%FG.mp3")]
+        public void DecodePath_Equal(string path, string expectedPath)
+        {
+            var decodedPath = Utils.Utils.DecodePath(path);
+
+            Assert.AreEqual(expectedPath, decodedPath);
+        }
+
+        [TestMethod]
+        [DataRow("%01.mp3", "%01.mp3")]
+        [DataRow("%A1.mp3", "%A1.mp3")]
+        [DataRow("%FF.mp3", "%FF.mp3")]
+        public void DecodePath_NotEqual(string path, string expectedPath)
+        {
+            var decodedPath = Utils.Utils.DecodePath(path);
+
+            Assert.AreNotEqual(expectedPath, decodedPath);
+        }
     }
 }
