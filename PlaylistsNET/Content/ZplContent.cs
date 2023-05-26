@@ -55,6 +55,12 @@ namespace PlaylistsNET.Content
             return GetFromString(streamReader.ReadToEnd());
         }
 
+        public ZplPlaylist GetFromStream(Stream stream, Encoding encoding)
+        {
+            StreamReader streamReader = new StreamReader(stream, encoding);
+            return GetFromString(streamReader.ReadToEnd());
+        }
+
         public ZplPlaylist GetFromString(string playlistString)
         {
             ZplPlaylist playlist = new ZplPlaylist();

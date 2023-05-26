@@ -61,6 +61,12 @@ namespace PlaylistsNET.Content
             return GetFromString(streamReader.ReadToEnd());
         }
 
+        public M3uPlaylist GetFromStream(Stream stream, Encoding encoding)
+        {
+            StreamReader streamReader = new StreamReader(stream, encoding);
+            return GetFromString(streamReader.ReadToEnd());
+        }
+
         public M3uPlaylist GetFromString(string playlistString)
         {
             var playlistLines = playlistString.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries).Select(x => x.Trim()).ToList();
