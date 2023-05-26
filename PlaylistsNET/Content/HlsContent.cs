@@ -62,6 +62,12 @@ namespace PlaylistsNET.Content
             return GetFromString(streamReader.ReadToEnd());
         }
 
+        public HlsMediaPlaylist GetFromStream(Stream stream, Encoding encoding)
+        {
+            StreamReader streamReader = new StreamReader(stream, encoding);
+            return GetFromString(streamReader.ReadToEnd());
+        }
+
         public HlsMediaPlaylist GetFromString(string playlistString)
         {
             var playlistLines = playlistString.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries).Select(x => x.Trim()).ToList();
@@ -278,6 +284,12 @@ namespace PlaylistsNET.Content
         public HlsMasterPlaylist GetFromStream(Stream stream)
         {
             StreamReader streamReader = new StreamReader(stream);
+            return GetFromString(streamReader.ReadToEnd());
+        }
+
+        public HlsMasterPlaylist GetFromStream(Stream stream, Encoding encoding)
+        {
+            StreamReader streamReader = new StreamReader(stream, encoding);
             return GetFromString(streamReader.ReadToEnd());
         }
 

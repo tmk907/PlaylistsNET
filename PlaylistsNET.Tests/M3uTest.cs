@@ -3,6 +3,7 @@ using PlaylistsNET.Content;
 using PlaylistsNET.Models;
 using System;
 using System.Linq;
+using System.Text;
 
 namespace PlaylistsNET.Tests
 {
@@ -215,6 +216,51 @@ namespace PlaylistsNET.Tests
                 
                 Assert.AreEqual(entry.Path, fileEntry.Path);
                 Assert.AreEqual(entry.Title, fileEntry.Title);
+            }
+        }
+
+#if NET6_0
+        [TestMethod]
+        public void GetFromStream_should_read_Latin1_playlist_if_encoding_provided()
+        {
+            var entry = new M3uPlaylistEntry
+            {
+                Duration = TimeSpan.FromSeconds(300),
+                Path = @"M:\Röyksopp feat. Susanne Sundfør - Running To The Sea.mp3",
+                Title = "Röyksopp feat. Susanne Sundfør - Running To The Sea",
+            };
+
+            var content = new M3uContent();
+            using (var stream = Helpers.ReadStream("LatinEncoding.m3u"))
+            {
+                var file = content.GetFromStream(stream, Encoding.Latin1);
+                var fileEntry = file.PlaylistEntries[0];
+
+                Assert.AreEqual(entry.Duration, fileEntry.Duration);
+                Assert.AreEqual(entry.Path, fileEntry.Path);
+                Assert.AreEqual(entry.Title, fileEntry.Title);
+            }
+        }
+#endif
+        [TestMethod]
+        public void GetFromStream_should_not_read_Latin1_playlist_if_encoding_not_provided()
+        {
+            var entry = new M3uPlaylistEntry
+            {
+                Duration = TimeSpan.FromSeconds(300),
+                Path = @"M:\Röyksopp feat. Susanne Sundfør - Running To The Sea.mp3",
+                Title = "Röyksopp feat. Susanne Sundfør - Running To The Sea",
+            };
+
+            var content = new M3uContent();
+            using (var stream = Helpers.ReadStream("LatinEncoding.m3u"))
+            {
+                var file = content.GetFromStream(stream, Encoding.UTF8);
+                var fileEntry = file.PlaylistEntries[0];
+
+                Assert.AreEqual(entry.Duration, fileEntry.Duration);
+                Assert.AreNotEqual(entry.Path, fileEntry.Path);
+                Assert.AreNotEqual(entry.Title, fileEntry.Title);
             }
         }
     }
