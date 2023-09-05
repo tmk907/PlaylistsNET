@@ -1,0 +1,25 @@
+name: nuget-build-test-publish
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+  packages: write
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+          dotnet-version: 6.0.x 
+    - name: Check out Code
+      uses: actions/checkout@v3
+      with:
+         fetch-depth: 0
+    - name: Build Cake
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+      run: |
+        chmod +x build.sh
+        ./build.sh --target Publish
