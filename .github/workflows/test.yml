@@ -24,4 +24,4 @@ jobs:
     - name: Build Cake
       run: |
         chmod +x build.sh
-        ./build.sh --target Test
+        ./build.ps1 --target Test
